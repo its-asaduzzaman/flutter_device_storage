@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_device_storage/models/note_database.dart';
 import 'package:provider/provider.dart';
@@ -59,8 +57,39 @@ class _NotePageState extends State<NotePage> {
   }
 
   //update a note
+  void updateNote(Note note) {
+    textController.text = note.text;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("update note"),
+        content: TextField(
+          controller: textController,
+        ),
+        actions: [
+          //update button
+          MaterialButton(
+            onPressed: () {
+              //update note in db
+              context
+                  .read<NoteDatabase>()
+                  .updateNote(note.id, textController.text);
+              //clear text controller
+              textController.clear();
+              //pop dialog box
+              Navigator.pop(context);
+            },
+            child: const Text("Update"),
+          ),
+        ],
+      ),
+    );
+  }
 
   //delete a note
+  void deleteNote(int id) {
+    context.read<NoteDatabase>().deleteNote(id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +113,22 @@ class _NotePageState extends State<NotePage> {
           final note = currentNotes[index];
           return ListTile(
             title: Text(note.text),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                //edite button
+                IconButton(
+                  onPressed: () => updateNote(note),
+                  icon: const Icon(Icons.edit),
+                ),
+
+                //delete button
+                IconButton(
+                  onPressed: () => deleteNote(note.id),
+                  icon: const Icon(Icons.delete),
+                ),
+              ],
+            ),
           );
         },
       ),
