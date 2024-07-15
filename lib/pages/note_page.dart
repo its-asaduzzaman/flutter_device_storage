@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_device_storage/components/my_drawer.dart';
 import 'package:flutter_device_storage/models/note_database.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../models/note.dart';
@@ -79,7 +81,9 @@ class _NotePageState extends State<NotePage> {
               //pop dialog box
               Navigator.pop(context);
             },
-            child: const Text("Update"),
+            child: const Text(
+              "Update",
+            ),
           ),
         ],
       ),
@@ -100,37 +104,65 @@ class _NotePageState extends State<NotePage> {
     List<Note> currentNotes = noteDatabase.currentNote;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: const Text("Notes"),
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         onPressed: createNote,
-        child: const Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
       ),
-      body: ListView.builder(
-        itemCount: currentNotes.length,
-        itemBuilder: (context, index) {
-          final note = currentNotes[index];
-          return ListTile(
-            title: Text(note.text),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                //edite button
-                IconButton(
-                  onPressed: () => updateNote(note),
-                  icon: const Icon(Icons.edit),
-                ),
-
-                //delete button
-                IconButton(
-                  onPressed: () => deleteNote(note.id),
-                  icon: const Icon(Icons.delete),
-                ),
-              ],
+      drawer: const MyDrawer(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //heading
+          Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: Text(
+              "Notes",
+              style: GoogleFonts.dmSerifText(
+                fontSize: 48,
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
             ),
-          );
-        },
+          ),
+
+          //list of notes
+          Expanded(
+            child: ListView.builder(
+              itemCount: currentNotes.length,
+              itemBuilder: (context, index) {
+                final note = currentNotes[index];
+                return ListTile(
+                  title: Text(note.text),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      //edite button
+                      IconButton(
+                        onPressed: () => updateNote(note),
+                        icon: const Icon(Icons.edit),
+                      ),
+
+                      //delete button
+                      IconButton(
+                        onPressed: () => deleteNote(note.id),
+                        icon: const Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

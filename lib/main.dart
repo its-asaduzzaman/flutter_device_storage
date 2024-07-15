@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_device_storage/models/note_database.dart';
 import 'package:flutter_device_storage/pages/note_page.dart';
+import 'package:flutter_device_storage/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -8,8 +9,14 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NoteDatabase.initialize();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => NoteDatabase(),
+    MultiProvider(
+      providers: [
+        //note provider
+        ChangeNotifierProvider(create: (context) => NoteDatabase()),
+
+        //theme provider
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ],
       child: const MyApp(),
     ),
   );
@@ -24,10 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: const NotePage(),
     );
   }
