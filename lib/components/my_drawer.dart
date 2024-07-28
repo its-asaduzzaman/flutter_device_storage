@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../pages/setting_page.dart';
 
-
-
 class MyDrawer extends StatelessWidget {
   const MyDrawer({super.key});
 
@@ -59,5 +57,3 @@ class MyDrawer extends StatelessWidget {
     );
   }
 }
-
-

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_device_storage/components/my_drawer.dart';
+import 'package:flutter_device_storage/components/note_tile.dart';
 import 'package:flutter_device_storage/models/note_database.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class _NotePageState extends State<NotePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         content: TextField(
           controller: textController,
         ),
@@ -64,6 +66,7 @@ class _NotePageState extends State<NotePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         title: const Text("update note"),
         content: TextField(
           controller: textController,
@@ -140,24 +143,10 @@ class _NotePageState extends State<NotePage> {
               itemCount: currentNotes.length,
               itemBuilder: (context, index) {
                 final note = currentNotes[index];
-                return ListTile(
-                  title: Text(note.text),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      //edite button
-                      IconButton(
-                        onPressed: () => updateNote(note),
-                        icon: const Icon(Icons.edit),
-                      ),
-
-                      //delete button
-                      IconButton(
-                        onPressed: () => deleteNote(note.id),
-                        icon: const Icon(Icons.delete),
-                      ),
-                    ],
-                  ),
+                return NoteTile(
+                  text: note.text,
+                  onEditPressed: () => updateNote(note),
+                  onDeletePressed: () => deleteNote(note.id),
                 );
               },
             ),
