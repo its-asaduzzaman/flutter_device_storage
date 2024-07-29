@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:popover/popover.dart';
+
+import 'note_settings.dart';
 
 class NoteTile extends StatelessWidget {
   final String text;
@@ -22,19 +25,23 @@ class NoteTile extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10, left: 25, right: 25),
       child: ListTile(
         title: Text(text),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              onPressed: onEditPressed,
-              icon: const Icon(Icons.edit),
+        trailing: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () => showPopover(
+              width: 100,
+              height: 105,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              context: context,
+              bodyBuilder: (context) => NoteSettings(
+                onEditTap: onEditPressed,
+                onDeleteTap: onDeletePressed,
+              ),
             ),
-            IconButton(
-              onPressed: onDeletePressed,
-              icon: const Icon(Icons.delete),
+            icon: const Icon(
+              Icons.more_vert,
             ),
-          ],
-        ),
+          );
+        }),
       ),
     );
   }
